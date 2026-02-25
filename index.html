@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Southeast Asia Transport Hub | Book Trains, Buses & Ferries</title>
+    <meta name="description" content="Compare and book transportation across Southeast Asia. Trains, buses, ferries, and private transfers in Thailand, Vietnam, Malaysia, Indonesia & more.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B35;
+            --secondary: #004E89;
+            --accent: #1A936F;
+            --dark: #1A1A2E;
+            --light: #F7F7F7;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        nav.scrolled {
+            padding: 0.5rem 5%;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🚂";
+            font-size: 2rem;
+            -webkit-text-fill-color: initial;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            position: relative;
+            overflow: hidden;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .hero-content h1 span {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-content h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--primary);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2rem;
+            animation: slideIn 0.8s ease-out 0.2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            animation: slideIn 0.8s ease-out 0.4s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Search Widget */
+        .search-widget {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.8s ease-out 0.3s both;
+        }
+
+        .search-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-radius: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        .search-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group::before {
+            content: '📍';
+            position: absolute;
+            left: 1rem;
+            top: 2.3rem;
+            font-size: 1.2rem;
+        }
+
+        .form-group.date::before { content: '📅'; }
+        .form-group.travelers::before { content: '👥'; }
+
+        .swap-btn {
+            position: absolute;
+            right: 1rem;
+            top: 2.3rem;
+            background: var(--light);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .swap-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(180deg);
+        }
+
+        .search-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+        }
+
+        /* Popular Routes */
+        .popular-routes {
+            padding: 5rem 5%;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .routes-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .route-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .route-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .route-card:nth-child(2) .route-image { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .route-card:nth-child(3) .route-image { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .route-card:nth-child(4) .route-image { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .route-card:nth-child(5) .route-image { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .route-card:nth-child(6) .route-image { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+
+        .route-image::after {
+            content: attr(data-route);
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .route-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.9);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .route-info {
+            padding: 1.5rem;
+        }
+
+        .route-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .route-type {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .type-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .route-price {
+            text-align: right;
+        }
+
+        .price-from {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .price-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .route-details {
+            display: flex;
+            gap: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .book-btn:hover {
+            background: var(--primary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background: var(--light);
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Countries Section */
+        .countries {
+            padding: 5rem 5%;
+            background: white;
+        }
+
+        .countries-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .country-card {
+            position: relative;
+            height: 250px;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .country-card:hover {
+            transform: scale(1.05);
+        }
+
+        .country-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.8;
+        }
+
+        .country-card:nth-child(1) .country-bg { background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%); }
+        .country-card:nth-child(2) .country-bg { background: linear-gradient(135deg, #4ECDC4 0%, #556270 100%); }
+        .country-card:nth-child(3) .country-bg { background: linear-gradient(135deg, #C7F464 0%, #4D7358 100%); }
+        .country-card:nth-child(4) .country-bg { background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%); }
+        .country-card:nth-child(5) .country-bg { background: linear-gradient(135deg, #F8B500 0%, #F85F73 100%); }
+        .country-card:nth-child(6) .country-bg { background: linear-gradient(135deg, #5F72BD 0%, #9B23EA 100%); }
+
+        .country-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+        }
+
+        .country-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .country-content p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Partners Section */
+        .partners {
+            padding: 3rem 5%;
+            background: var(--light);
+            text-align: center;
+        }
+
+        .partners h3 {
+            color: #666;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .partners-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+
+        .partner-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            filter: grayscale(100%);
+            transition: all 0.3s;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .search-widget {
+                margin-top: 2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--dark);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">SEATransport</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#routes">Popular Routes</a></li>
+                <li><a href="#countries">Countries</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">☰</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Travel <span>Southeast Asia</span> Like a Local</h1>
+                <p>Book trains, buses, ferries, and private transfers across 11 countries. Compare prices, read reviews, and travel with confidence.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">22K+</span>
+                        <span class="stat-label">Routes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">14K+</span>
+                        <span class="stat-label">Destinations</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">330K+</span>
+                        <span class="stat-label">Reviews</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-widget">
+                <div class="search-tabs">
+                    <button class="tab-btn active" onclick="switchTab(this, 'all')">🚆 All</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'train')">🚂 Train</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'bus')">🚌 Bus</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'ferry')">⛴️ Ferry</button>
+                </div>
+
+                <form class="search-form" onsubmit="handleSearch(event)">
+                    <div class="form-group">
+                        <label>From</label>
+                        <input type="text" id="from" placeholder="Bangkok, Thailand" required>
+                        <button type="button" class="swap-btn" onclick="swapLocations()">⇄</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>To</label>
+                        <input type="text" id="to" placeholder="Chiang Mai, Thailand" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group date">
+                            <label>Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        
+                        <div class="form-group travelers">
+                            <label>Travelers</label>
+                            <select id="travelers">
+                                <option value="1">1 Passenger</option>
+                                <option value="2" selected>2 Passengers</option>
+                                <option value="3">3 Passengers</option>
+                                <option value="4">4 Passengers</option>
+                                <option value="5+">5+ Passengers</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="search-btn">
+                        <span>Search Transport</span>
+                        <span>→</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Routes -->
+    <section class="popular-routes" id="routes">
+        <div class="section-header">
+            <h2>Popular Routes</h2>
+            <p>Most booked transportation routes across Southeast Asia with best prices guaranteed</p>
+        </div>
+
+        <div class="routes-grid">
+            <div class="route-card" onclick="bookRoute('bangkok', 'chiangmai')">
+                <div class="route-image" data-route="Bangkok → Chiang Mai">
+                    <span class="route-badge">Popular</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-meta">
+                        <div class="route-type">
+                            <div class="type-icon" title="Train">🚂</div>
+                            <div class="type-icon" title="Bus">🚌</div>
+                            <div class="type-icon" title="Flight">✈️</div>
+                        </div>
+                        <div class="route-price">
+                            <div class="price-from">From</div>
+                            <div class="price-value">$15</div>
+                        </div>
+                    </div>
+                    <div class="route-details">
+                        <span>⏱️ 10-12h</span>
+                        <span>📍 700km</span>
+                        <span>⭐ 4.8/5</span>
+                    </div>
+                    <button class="book-btn">Check Availability</button>
+                </div>
+            </div>
+
+            <div class="route-card" onclick="bookRoute('singapore', 'kualalumpur')">
+                <div class="route-image" data-route="Singapore → KL">
+                    <span class="route-badge">Best Value</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-meta">
+                        <div class="route-type">
+                            <div class="type-icon" title="Bus">🚌</div>
+                            <div class="type-icon" title="Train">🚂</div>
+                        </div>
+                        <div class="route-price">
+                            <div class="price-from">From</div>
+                            <div class="price-value">$12</div>
+                        </div>
+                    </div>
+                    <div class="route-details">
+                        <span>⏱️ 5-6h</span>
+                        <span>📍 350km</span>
+                        <span>⭐ 4.6/5</span>
+                    </div>
+                    <button class="book-btn">Check Availability</button>
+                </div>
+            </div>
+
+            <div class="route-card" onclick="bookRoute('bali', 'gilit')">
+                <div class="route-image" data-route="Bali → Gili Islands">
+                    <span class="route-badge">Scenic</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-meta">
+                        <div class="route-type">
+                            <div class="type-icon" title="Ferry">⛴️</div>
+                            <div class="type-icon" title="Speedboat">🚤</div>
+                        </div>
+                        <div class="route-price">
+                            <div class="price-from">From</div>
+                            <div class="price-value">$25</div>
+                        </div>
+                    </div>
+                    <div class="route-details">
+                        <span>⏱️ 2-3h</span>
+                        <span>📍 Sea crossing</span>
+                        <span>⭐ 4.9/5</span>
+                    </div>
+                    <button class="book-btn">Check Availability</button>
+                </div>
+            </div>
+
+            <div class="route-card" onclick="bookRoute('hanoi', 'hoian')">
+                <div class="route-image" data-route="Hanoi → Hoi An">
+                    <span class="route-badge">Trending</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-meta">
+                        <div class="route-type">
+                            <div class="type-icon" title="Train">🚂</div>
+                            <div class="type-icon" title="Bus">🚌</div>
+                            <div class="type-icon" title="Flight">✈️</div>
+                        </div>
+                        <div class="route-price">
+                            <div class="price-from">From</div>
+                            <div class="price-value">$18</div>
+                        </div>
+                    </div>
+                    <div class="route-details">
+                        <span>⏱️ 14-16h</span>
+                        <span>📍 800km</span>
+                        <span>⭐ 4.7/5</span>
+                    </div>
+                    <button class="book-btn">Check Availability</button>
+                </div>
+            </div>
+
+            <div class="route-card" onclick="bookRoute('manila', 'boracay')">
+                <div class="route-image" data-route="Manila → Boracay">
+                    <span class="route-badge">Island Hop</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-meta">
+                        <div class="route-type">
+                            <div class="type-icon" title="Flight">✈️</div>
+                            <div class="type-icon" title="Ferry">⛴️</div>
+                        </div>
+                        <div class="route-price">
+                            <div class="price-from">From</div>
+                            <div class="price-value">$45</div>
+                        </div>
+                    </div>
+                    <div class="route-details">
+                        <span>⏱️ 4-5h</span>
+                        <span>📍 315km</span>
+                        <span>⭐ 4.8/5</span>
+                    </div>
+                    <button class="book-btn">Check Availability</button>
+                </div>
+            </div>
+
+            <div class="route-card" onclick="bookRoute('siemreap', 'phnompenh')">
+                <div class="route-image" data-route="Siem Reap → Phnom Penh">
+                    <span class="route-badge">Cultural</span>
+                </div>
+                <div class="route-info">
+                    <div class="route-meta">
+                        <div class="route-type">
+                            <div class="type-icon" title="Bus">🚌</div>
+                            <div class="type-icon" title="Boat">🚢</div>
+                        </div>
+                        <div class="route-price">
+                            <div class="price-from">From</div>
+                            <div class="price-value">$11</div>
+                        </div>
+                    </div>
+                    <div class="route-details">
+                        <span>⏱️ 5-6h</span>
+                        <span>📍 320km</span>
+                        <span>⭐ 4.5/5</span>
+                    </div>
+                    <button class="book-btn">Check Availability</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="section-header">
+            <h2>Why Book With Us?</h2>
+            <p>Your trusted partner for Southeast Asian transportation</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Best Price Guarantee</h3>
+                <p>We compare prices across 22,000+ operators to ensure you get the best deal every time.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎫</div>
+                <h3>Instant Confirmation</h3>
+                <p>Receive your tickets immediately via email and mobile app. No printing required.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>60+ Languages</h3>
+                <p>Book in your preferred language with 24/7 customer support in multiple languages.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Verified Reviews</h3>
+                <p>Read 330,000+ real traveler reviews before booking your journey.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Booking</h3>
+                <p>SSL encrypted payments with multiple secure payment options including PayPal.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Tickets</h3>
+                <p>Show your ticket on your phone. No need to print or visit a ticket office.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countries -->
+    <section class="countries" id="countries">
+        <div class="section-header">
+            <h2>Explore by Country</h2>
+            <p>Transportation guides and booking for every Southeast Asian destination</p>
+        </div>
+
+        <div class="countries-grid">
+            <div class="country-card" onclick="exploreCountry('thailand')">
+                <div class="country-bg"></div>
+                <div class="country-content">
+                    <h3>Thailand</h3>
+                    <p>3,500+ routes • Train, Bus, Ferry</p>
+                </div>
+            </div>
+
+            <div class="country-card" onclick="exploreCountry('vietnam')">
+                <div class="country-bg"></div>
+                <div class="country-content">
+                    <h3>Vietnam</h3>
+                    <p>2,800+ routes • Train, Bus, Flight</p>
+                </div>
+            </div>
+
+            <div class="country-card" onclick="exploreCountry('malaysia')">
+                <div class="country-bg"></div>
+                <div class="country-content">
+                    <h3>Malaysia</h3>
+                    <p>1,900+ routes • Train, Bus, Ferry</p>
+                </div>
+            </div>
+
+            <div class="country-card" onclick="exploreCountry('indonesia')">
+                <div class="country-bg"></div>
+                <div class="country-content">
+                    <h3>Indonesia</h3>
+                    <p>4,200+ routes • Ferry, Bus, Flight</p>
+                </div>
+            </div>
+
+            <div class="country-card" onclick="exploreCountry('philippines')">
+                <div class="country-bg"></div>
+                <div class="country-content">
+                    <h3>Philippines</h3>
+                    <p>2,100+ routes • Ferry, Flight, Bus</p>
+                </div>
+            </div>
+
+            <div class="country-card" onclick="exploreCountry('cambodia')">
+                <div class="country-bg"></div>
+                <div class="country-content">
+                    <h3>Cambodia</h3>
+                    <p>800+ routes • Bus, Boat, Taxi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners -->
+    <section class="partners">
+        <h3>Trusted Partners</h3>
+        <div class="partners-logos">
+            <div class="partner-logo">12Go</div>
+            <div class="partner-logo">Easybook</div>
+            <div class="partner-logo">Tourplus</div>
+            <div class="partner-logo">Trip.com</div>
+            <div class="partner-logo">GetTransfer</div>
+            <div class="partner-logo">DiscoverCars</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Transport Types</h4>
+                <ul>
+                    <li><a href="#">Train Tickets</a></li>
+                    <li><a href="#">Bus Booking</a></li>
+                    <li><a href="#">Ferry Services</a></li>
+                    <li><a href="#">Private Transfers</a></li>
+                    <li><a href="#">Car Rentals</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Popular Destinations</h4>
+                <ul>
+                    <li><a href="#">Bangkok to Chiang Mai</a></li>
+                    <li><a href="#">Singapore to Kuala Lumpur</a></li>
+                    <li><a href="#">Bali to Gili Islands</a></li>
+                    <li><a href="#">Hanoi to Ho Chi Minh</a></li>
+                    <li><a href="#">Manila to Boracay</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Travel Blog</a></li>
+                    <li><a href="#">Affiliate Program</a></li>
+                    <li><a href="#">Partner With Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Cancellation Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 SEATransport Affiliate Hub. All rights reserved. This site contains affiliate links.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Redirecting to booking partner...</div>
+
+    <script>
+        // Set default date to tomorrow
+        document.getElementById('date').valueAsDate = new Date(Date.now() + 86400000);
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Tab switching
+        function switchTab(btn, type) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update placeholders based on transport type
+            const fromInput = document.getElementById('from');
+            const toInput = document.getElementById('to');
+            
+            const placeholders = {
+                'all': ['Bangkok, Thailand', 'Chiang Mai, Thailand'],
+                'train': ['Bangkok Hua Lamphong', 'Chiang Mai Railway'],
+                'bus': ['Bangkok Mo Chit', 'Chiang Mai Arcade'],
+                'ferry': ['Bali Padang Bai', 'Gili Trawangan']
+            };
+            
+            fromInput.placeholder = placeholders[type][0];
+            toInput.placeholder = placeholders[type][1];
+        }
+
+        // Swap locations
+        function swapLocations() {
+            const from = document.getElementById('from');
+            const to = document.getElementById('to');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+        }
+
+        // Handle search
+        function handleSearch(e) {
+            e.preventDefault();
+            const from = document.getElementById('from').value;
+            const to = document.getElementById('to').value;
+            const date = document.getElementById('date').value;
+            
+            if (!from || !to) {
+                showToast('Please enter both origin and destination');
+                return;
+            }
+
+            // Show loading state
+            const btn = e.target.querySelector('.search-btn');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="loading"></span> Searching...';
+            btn.disabled = true;
+
+            // Simulate search and redirect to affiliate link
+            setTimeout(() => {
+                // In production, this would redirect to your affiliate link with parameters
+                const affiliateUrl = `https://12go.asia/en/travel/${encodeURIComponent(from)}/${encodeURIComponent(to)}?date=${date}&utm_source=your-affiliate-id`;
+                window.open(affiliateUrl, '_blank');
+                
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                showToast('Opening booking partner...');
+            }, 1500);
+        }
+
+        // Book specific route
+        function bookRoute(from, to) {
+            showToast('Checking availability...');
+            
+            // Map route codes to actual names
+            const routeMap = {
+                'bangkok': 'Bangkok',
+                'chiangmai': 'Chiang Mai',
+                'singapore': 'Singapore',
+                'kualalumpur': 'Kuala Lumpur',
+                'bali': 'Bali',
+                'gilit': 'Gili Trawangan',
+                'hanoi': 'Hanoi',
+                'hoian': 'Hoi An',
+                'manila': 'Manila',
+                'boracay': 'Boracay',
+                'siemreap': 'Siem Reap',
+                'phnompenh': 'Phnom Penh'
+            };
+
+            const fromName = routeMap[from] || from;
+            const toName = routeMap[to] || to;
+
+            setTimeout(() => {
+                const affiliateUrl = `https://12go.asia/en/travel/${encodeURIComponent(fromName)}/${encodeURIComponent(toName)}?utm_source=your-affiliate-id`;
+                window.open(affiliateUrl, '_blank');
+            }, 800);
+        }
+
+        // Explore country
+        function exploreCountry(country) {
+            showToast(`Loading ${country} transport options...`);
+            
+            setTimeout(() => {
+                const affiliateUrl = `https://12go.asia/en/country/${country}?utm_source=your-affiliate-id`;
+                window.open(affiliateUrl, '_blank');
+            }, 800);
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe cards for animation
+        document.querySelectorAll('.route-card, .feature-card, .country-card').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
